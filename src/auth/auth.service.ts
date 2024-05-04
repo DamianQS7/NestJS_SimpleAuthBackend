@@ -100,7 +100,7 @@ export class AuthService {
     return `This action removes a #${id} auth`;
   }
 
-  private getJwtToken(payload: JwtPayload) {
+  public getJwtToken(payload: JwtPayload) {
     const token = this.jwtService.sign(payload);
     return token;
   }

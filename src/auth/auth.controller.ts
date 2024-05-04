@@ -27,23 +27,34 @@ export class AuthController {
 
   @Get()
   @UseGuards(AuthGuard)
-  public findAll(@Request() req: Request) {
+  public findAll(@Request() req: Request): Promise<User[]> {
     return this.authService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.authService.findOne(+id);
+  @UseGuards(AuthGuard)
+  @Get('/check-token')
+  public checkToken(@Request() req: Request): LoginResponse {
+    const user = req['user'] as User;
+
+    return {
+      user,
+      token: this.authService.getJwtToken({id: user._id})
+    }
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
-    return this.authService.update(+id, updateAuthDto);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.authService.findOne(+id);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.authService.remove(+id);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateAuthDto: UpdateAuthDto) {
+  //   return this.authService.update(+id, updateAuthDto);
+  // }
+
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.authService.remove(+id);
+  // }
   
 }
